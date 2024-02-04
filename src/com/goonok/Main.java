@@ -4,6 +4,8 @@ import com.goonok.dao.HotelDAO;
 
 import java.util.Scanner;
 
+import static com.goonok.dao.HotelDAO.exit;
+
 public class Main {
     public static void main(String[] args) {
         HotelDAO hotelDAO = new HotelDAO();
@@ -20,6 +22,7 @@ public class Main {
             System.out.println("====================================================");
             System.out.print("Enter your choice: ");
             int choice = input.nextInt();
+            input.nextLine();
             switch (choice){
                 case 1:
                     hotelDAO.reserveARoom();
@@ -42,6 +45,11 @@ public class Main {
                     System.out.println("====================================================");
                     break;
                 case 0:
+                    try {
+                        HotelDAO.exit();
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
                     break;
                 default:
                     System.out.println("Enter valid choice");

@@ -146,6 +146,31 @@ public class HotelDAO {
     }
 
     public void deleteReservation() {
+        System.out.print("Enter reservation ID: ");
+        int reservationID = scanner.nextInt();
+        if (isReservationExist(connection, reservationID)){
+            System.out.print("Do you really want to delete reservation for id= " + reservationID + " ? (y/n): ");
+            char c = scanner.next().charAt(0);
+            System.out.println("====================================================");
+            if (c=='y' || c=='Y'){
+                String query = "DELETE FROM reservations WHERE reservation_id = ?";
+                try{
+                    PreparedStatement preparedStatement = connection.prepareStatement(query);
+                    preparedStatement.setInt(1, reservationID);
+                    int rowsAffected = preparedStatement.executeUpdate();
+                    if (rowsAffected>0){
+                        System.out.println("Reservation has been deleted!");
+                    }else {
+                        System.out.println("Failed to delete the reservation");
+                    }
+                }catch (SQLException e){
+                    System.out.println("Database Connection Failed on deleteReservation() - " + e.getMessage());
+                }
+            }else {
+                System.out.println("Your request has been cancelled!");
+            }
+        }
+
     }
 
     private boolean isReservationExist(Connection connection, int reservationID){
@@ -160,5 +185,17 @@ public class HotelDAO {
             System.err.println("Database connection failed at isReservationExist() - " + e.getMessage());
         }
         return false;
+    }
+
+    public static void exit() throws InterruptedException{
+        System.out.println("Exiting System");
+        int i = 5;
+        while (i!=0){
+            System.out.println(".");
+            Thread.sleep(450);
+            i--;
+        }
+        System.out.println();
+        System.out.println("Thank you from Using Hotel Reservation System!!!");
     }
 }
